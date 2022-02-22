@@ -2,12 +2,10 @@ from Model import UNetmodel
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from ImgDataLoader import DataSetLoader
 from torch.utils import data
 cuda =  torch.cuda.is_available() and True
-criterion = nn.BCEWithLogitsLoss()
 
-def train(epoch, Unet=UNetmodel.UNet,optimizer=optim,loader_train=data.DataLoader):
+def train(epoch, Unet=UNetmodel.UNet,optimizer=optim,loader_train=data.DataLoader,criterion=nn):
 
     Unet.train()
     train_loss = torch.zeros(len(loader_train))
@@ -27,7 +25,7 @@ def train(epoch, Unet=UNetmodel.UNet,optimizer=optim,loader_train=data.DataLoade
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-        print ("epoch %d step %d, loss=%.8f" %(epoch, i, loss.item()))
+        #print ("epoch %d step %d, loss=%.8f" %(epoch, i, loss.item()))
     if epoch % 10 == 0:    
         torch.save(Unet.state_dict(), 'ReanutTrial4UnetD6_%d.pth' % (epoch))
     #np.savetxt("D6train_loss%d" %(epoch+71), train_loss.numpy())

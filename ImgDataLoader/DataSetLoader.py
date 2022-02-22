@@ -13,14 +13,11 @@ class DataSetLoader(Dataset):
         self.label_transform = label_transform
         self.files = []
         
-        imgset_dir = os.path.join(self.root, r'C:\Users\k.hamad\Desktop\UF\PhD\Github\Pytorch-UNet\data')
-        
-        imgset_dir= os.path.join(imgset_dir, f)
-        images=glob.glob(os.path.join(r'C:\Users\k.hamad\Desktop\UF\PhD\Github\Pytorch-UNet\data', f ,r'*.png'))
+        images=glob.glob(os.path.join(self.root, f ,r'*.png'))
         for im in images:
             self.files.append({
                     "img": im,
-                    "label": os.path.join(r'C:\Users\k.hamad\Desktop\UF\PhD\Github\Pytorch-UNet\data',f,r'labels',im[im.rfind('\\')+1:-4]+r'.npy')
+                    "label": os.path.join(self.root,f,r'labels',im[im.rfind('\\')+1:-4]+r'.npy')
                     })
     def __len__(self):     
         # print("files size in dataset class", len(self.files))
@@ -41,17 +38,9 @@ class DataSetLoader(Dataset):
             img = img.convert('RGB')
                     
         label_file = datafiles["label"]
-        #print(label_file)
-        # label = Image.open(label_file).convert("P")
-        
         
         if self.img_transform is not None:
             img = self.img_transform(img)
-            
-         
-       
-        # label = np.expand_dims(np.array(label),2)*255
-        #print(label_file)
         label_file = np.load(label_file)*255
         label_file = label_file.astype(int)
         
